@@ -1,34 +1,36 @@
 FROM clearlinux:latest AS builder
 
-# Allow arguments (e.g. --version) into swupd as it updates OS
-ARG swupd_args
-RUN swupd update --no-progress --no-boot-update $swupd_args
+LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
+    org.uclahealth.version.htslib="1.9" \
+    org.uclahealth.version.bcftools="1.9" \
+    org.uclahealth.version.samtools="1.9" \
+    org.uclahealth.version.tabix="1.9" \
+    org.uclahealth.version.bgzip="1.9"
 
-# Install bundles needed to download and build app
-RUN swupd bundle-add --no-progress curl \
-    devpkg-bzip2 \
-    devpkg-xz \
-    devpkg-ncurses \
-    devpkg-curl \
-    devpkg-openssl \
-    samtools
+ENV CLEAR_VERSION 32760
+ENV MINICONDA_VERSION py38_4.8.2
+ENV HTSLIB_VERSION 1.9
+ENV BCFTOOLS_VERSION 1.9
+ENV SAMTOOLS_VERSION 1.9
+
+# Use the specific OS version with the software bundles we need
+RUN swupd update --no-progress --no-boot-update --version ${CLEAR_VERSION}
 
 # Prepare a root directory with minimal app runtimes
-RUN source /usr/lib/os-release && \
-    mkdir /install_root && \
+RUN mkdir /install_root && \
     swupd os-install --no-progress --no-boot-update \
-    --version ${VERSION_ID} \
+    --version ${CLEAR_VERSION} \
     --path /install_root \
     --statedir /swupd-state \
-    --bundles os-core,samtools
+    --bundles os-core
 
-# Build app and install into the minimal root directory
-RUN HTSLIB_VERSION=`bcftools version | grep -E '^Using htslib' | cut -d' ' -f3` && \
-    cd /tmp && \
-    curl -sLO https://github.com/samtools/htslib/archive/${HTSLIB_VERSION}.tar.gz && \
-    tar -zxf ${HTSLIB_VERSION}.tar.gz && \
-    cd /tmp/htslib-${HTSLIB_VERSION} && \
-    make -j4 prefix=/install_root/usr install
+# Use conda to install target apps into the minimal root directory
+RUN swupd bundle-add --no-progress curl && \
+    curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
+    sh /tmp/miniconda.sh -bfp /usr/local && \
+    conda install -qy -p /install_root/usr/local -c bioconda htslib==${HTSLIB_VERSION} bcftools==${BCFTOOLS_VERSION} samtools==${SAMTOOLS_VERSION} && \
+    conda clean -afy && \
+    rm -f /tmp/miniconda.sh
 
 # Deploy the minimal OS into a clean target layer
 FROM scratch

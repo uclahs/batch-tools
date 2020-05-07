@@ -1,6 +1,6 @@
 FROM clearlinux:latest AS builder
 
-# BUILD_CMD: docker build --pull -t htsib:1.10.2 .
+# BUILD_CMD: docker build --pull -t minimap2:2.17 .
 
 # Install a minimal versioned OS into /install_root
 ENV CLEAR_VERSION=33010
@@ -17,25 +17,18 @@ RUN swupd bundle-add --no-progress curl && \
     sh /tmp/miniconda.sh -bfp /usr
 
 # Use conda to install remaining tools/dependencies into /usr/local
-ENV HTSLIB_VERSION=1.10.2 \
-    BCFTOOLS_VERSION=1.10.2 \
-    SAMTOOLS_VERSION=1.10
+ENV MINIMAP2_VERSION=2.17
 RUN conda create -qy -p /usr/local \
         -c conda-forge \
         -c bioconda \
         -c defaults \
-        htslib==${HTSLIB_VERSION} \
-        bcftools==${BCFTOOLS_VERSION} \
-        samtools==${SAMTOOLS_VERSION}
+        minimap2==${MINIMAP2_VERSION}
 
 # Deploy the minimal OS and target app(s) into a clean image
 FROM scratch
 
 LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.bgzip="1.10.2" \
-    org.uclahealth.version.tabix="1.10.2" \
-    org.uclahealth.version.bcftools="1.10.2" \
-    org.uclahealth.version.samtools="1.10"
+    org.uclahealth.version.minimap2="2.17"
 
 COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local

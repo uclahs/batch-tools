@@ -1,9 +1,9 @@
 FROM clearlinux:latest AS builder
 
-# BUILD_CMD: docker build --pull -t htsib:1.10.2 .
+# BUILD_CMD: docker build --pull -t htslib:1.11 .
 
 # Install a minimal versioned OS into /install_root
-ENV CLEAR_VERSION=33010
+ENV CLEAR_VERSION=34130
 RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --version ${CLEAR_VERSION} \
     --path /install_root \
@@ -11,15 +11,15 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Download and install conda into /usr/bin
-ENV MINICONDA_VERSION=py38_4.8.2
+ENV MINICONDA_VERSION=py37_4.9.2
 RUN swupd bundle-add --no-progress curl && \
     curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
     sh /tmp/miniconda.sh -bfp /usr
 
 # Use conda to install remaining tools/dependencies into /usr/local
-ENV HTSLIB_VERSION=1.10.2 \
-    BCFTOOLS_VERSION=1.10.2 \
-    SAMTOOLS_VERSION=1.10
+ENV HTSLIB_VERSION=1.11 \
+    BCFTOOLS_VERSION=1.11 \
+    SAMTOOLS_VERSION=1.11
 RUN conda create -qy -p /usr/local \
         -c conda-forge \
         -c bioconda \
@@ -32,10 +32,10 @@ RUN conda create -qy -p /usr/local \
 FROM scratch
 
 LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.bgzip="1.10.2" \
-    org.uclahealth.version.tabix="1.10.2" \
-    org.uclahealth.version.bcftools="1.10.2" \
-    org.uclahealth.version.samtools="1.10"
+    org.uclahealth.version.bgzip="1.11" \
+    org.uclahealth.version.tabix="1.11" \
+    org.uclahealth.version.bcftools="1.11" \
+    org.uclahealth.version.samtools="1.11"
 
 COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local

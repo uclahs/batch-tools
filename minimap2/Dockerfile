@@ -3,7 +3,7 @@ FROM clearlinux:latest AS builder
 # BUILD_CMD: docker build --pull -t minimap2:2.17 .
 
 # Install a minimal versioned OS into /install_root
-ENV CLEAR_VERSION=33010
+ENV CLEAR_VERSION=34130
 RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --version ${CLEAR_VERSION} \
     --path /install_root \
@@ -11,7 +11,7 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Download and install conda into /usr/bin
-ENV MINICONDA_VERSION=py38_4.8.2
+ENV MINICONDA_VERSION=py37_4.9.2
 RUN swupd bundle-add --no-progress curl && \
     curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
     sh /tmp/miniconda.sh -bfp /usr

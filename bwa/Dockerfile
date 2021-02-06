@@ -15,18 +15,18 @@ RUN swupd bundle-add --no-progress curl && \
     sh /tmp/miniconda.sh -bfp /usr
 
 # Use conda to install remaining tools/dependencies into /usr/local
-ENV MINIMAP2_VERSION=2.17
+ENV BWA_VERSION=0.7.17
 RUN conda create -qy -p /usr/local \
         -c bioconda \
-        minimap2==${MINIMAP2_VERSION}
+        bwa==${BWA_VERSION}
 
 # Deploy the minimal OS and target app(s) into a clean image
 FROM scratch
 
 LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.minimap2="2.17"
+    org.uclahealth.version.bwa="0.7.17"
 
 COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
 
-# BUILD_CMD: docker build --pull -t minimap2:2.17 .
+# BUILD_CMD: docker build --pull -t bwa:0.7.17 .

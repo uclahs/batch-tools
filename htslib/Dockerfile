@@ -1,9 +1,7 @@
 FROM clearlinux:latest AS builder
 
-# BUILD_CMD: docker build --pull -t htslib:1.11 .
-
 # Install a minimal versioned OS into /install_root
-ENV CLEAR_VERSION=34130
+ENV CLEAR_VERSION=34220
 RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --version ${CLEAR_VERSION} \
     --path /install_root \
@@ -23,7 +21,6 @@ ENV HTSLIB_VERSION=1.11 \
 RUN conda create -qy -p /usr/local \
         -c conda-forge \
         -c bioconda \
-        -c defaults \
         htslib==${HTSLIB_VERSION} \
         bcftools==${BCFTOOLS_VERSION} \
         samtools==${SAMTOOLS_VERSION}
@@ -39,3 +36,5 @@ LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
 
 COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
+
+# BUILD_CMD: docker build --pull -t htslib:1.11 .

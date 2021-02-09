@@ -26,6 +26,6 @@ COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
 
 LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.minimap2="2.17"
+    org.uclahealth.version.minimap="2.17"
 
-# BUILD_CMD: docker build --pull -t minimap2:2.17 .
+# BUILD_CMD: docker build --pull -t minimap:2.17 .

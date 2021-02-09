@@ -15,10 +15,10 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Use conda to install remaining tools/dependencies into /usr/local
-ENV GATK_VERSION=4.1.9.0
+ENV PICARD_VERSION=2.24.2
 RUN conda create -qy -p /usr/local \
         -c bioconda \
-        gatk4==${GATK_VERSION}
+        picard==${PICARD_VERSION}
 
 # Deploy the minimal OS and target tools into a blank image
 FROM scratch
@@ -26,6 +26,6 @@ COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
 
 LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.gatk="4.1.9.0"
+    org.uclahealth.version.picard="2.24.2"
 
-# BUILD_CMD: docker build --pull -t gatk:4.1.9.0 .
+# BUILD_CMD: docker build --pull -t picard:2.24.2 .

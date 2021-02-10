@@ -18,7 +18,7 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
 ENV PICARD_VERSION=2.24.2
 RUN conda create -qy -p /usr/local \
         -c bioconda \
-        picard==${PICARD_VERSION}
+        picard-slim==${PICARD_VERSION}
 
 # Deploy the minimal OS and target tools into a blank image
 FROM scratch

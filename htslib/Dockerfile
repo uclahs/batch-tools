@@ -19,8 +19,8 @@ ENV HTSLIB_VERSION=1.11 \
     BCFTOOLS_VERSION=1.11 \
     SAMTOOLS_VERSION=1.11
 RUN conda create -qy -p /usr/local \
-        -c conda-forge \
         -c bioconda \
+        -c conda-forge \
         htslib==${HTSLIB_VERSION} \
         bcftools==${BCFTOOLS_VERSION} \
         samtools==${SAMTOOLS_VERSION}

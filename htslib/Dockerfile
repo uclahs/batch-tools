@@ -1,10 +1,10 @@
 FROM clearlinux:latest AS builder
 
-# Download and install conda into /usr/bin
-ENV MINICONDA_VERSION=py37_4.9.2
+# Download and install mamba into /usr/bin
+ENV MAMBAFORGE_VERSION=4.9.2-5
 RUN swupd bundle-add --no-progress curl && \
-    curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
-    sh /tmp/miniconda.sh -bfp /usr
+    curl -sL https://github.com/conda-forge/miniforge/releases/download/${MAMBAFORGE_VERSION}/Mambaforge-pypy3-Linux-x86_64.sh -o /tmp/mambaforge.sh && \
+    sh /tmp/mambaforge.sh -bfp /usr && rm -f /tmp/mambaforge.sh
 
 # Install a minimal versioned OS into /install_root
 ENV CLEAR_VERSION=34250
@@ -14,13 +14,12 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --statedir /swupd-state \
     --bundles os-core
 
-# Use conda to install remaining tools/dependencies into /usr/local
+# Use mamba to install remaining tools/dependencies into /usr/local
 ENV HTSLIB_VERSION=1.11 \
     BCFTOOLS_VERSION=1.11 \
     SAMTOOLS_VERSION=1.11
-RUN conda create -qy -p /usr/local \
+RUN mamba create -qy -p /usr/local \
         -c bioconda \
-        -c conda-forge \
         htslib==${HTSLIB_VERSION} \
         bcftools==${BCFTOOLS_VERSION} \
         samtools==${SAMTOOLS_VERSION}

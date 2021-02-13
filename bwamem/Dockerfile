@@ -26,10 +26,8 @@ COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
 
 ARG GIT_COMMIT
-ARG BUILD_DATE
 LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.opencontainers.image.source="https://github.com/ucladx/dockerfiles" \
-    org.opencontainers.image.revision=$GIT_COMMIT \
-    org.opencontainers.image.created=$BUILD_DATE
+    org.opencontainers.image.source="https://github.com/ucladx/dockerfiles/tree/"$GIT_COMMIT"/bwamem/Dockerfile" \
+    org.opencontainers.image.revision=$GIT_COMMIT
 
-# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) --build-arg BUILD_DATE=$(date --rfc-3339=date) -t bwamem:2.1 .
+# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t bwamem:2.1 .

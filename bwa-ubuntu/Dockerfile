@@ -16,7 +16,9 @@ RUN mamba create -qy -p /usr/local \
 FROM ubuntu:20.04
 COPY --from=builder /usr/local /usr/local
 
-LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.bwa="0.7.17-ubuntu"
+ARG GIT_COMMIT
+LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
+    org.opencontainers.image.source="https://github.com/ucladx/dockerfiles/tree/"$GIT_COMMIT"/bwa-ubuntu/Dockerfile" \
+    org.opencontainers.image.revision=$GIT_COMMIT
 
-# BUILD_CMD: docker build --pull -t bwa:0.7.17-ubuntu .
+# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t bwa:0.7.17-ubuntu .

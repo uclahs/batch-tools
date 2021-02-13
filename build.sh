@@ -2,6 +2,16 @@
 
 set -e
 
+# If there are unstaged/uncommitted/untracked files, then don't proceed further
+if [[ $(git diff-index HEAD --) ]]; then
+    echo "ERROR: Unstaged or uncommitted changes found. Commit everything before using this script."
+    exit 1
+fi
+if [[ $(git ls-files --exclude-standard --others) ]]; then
+    echo "ERROR: Untracked files found. Commit your changes before using this script."
+    exit 1
+fi
+
 # Look recursively for Dockerfiles, and run a "docker build" command grepped out from each
 current_dir=$(pwd)
 docker_files=$(find -type f -name Dockerfile)

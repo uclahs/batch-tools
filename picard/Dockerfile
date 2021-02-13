@@ -25,7 +25,9 @@ FROM scratch
 COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
 
-LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.uclahealth.version.picard="2.24.2"
+ARG GIT_COMMIT
+LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
+    org.opencontainers.image.source="https://github.com/ucladx/dockerfiles/tree/"$GIT_COMMIT"/picard/Dockerfile" \
+    org.opencontainers.image.revision=$GIT_COMMIT
 
-# BUILD_CMD: docker build --pull -t picard:2.24.2 .
+# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t picard:2.24.2 .

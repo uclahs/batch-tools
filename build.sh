@@ -19,7 +19,7 @@ for docker_file in $docker_files; do
     build_dir=$(dirname $docker_file)
     build_cmd=$(grep -E "^# BUILD_CMD" $docker_file | cut -d: -f2-)
     cd $build_dir
-    $build_cmd
+    eval $build_cmd
     cd $current_dir
 done
 

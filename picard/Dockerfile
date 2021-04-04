@@ -1,7 +1,7 @@
 FROM clearlinux:latest AS builder
 
 # Download and install mamba into /usr/bin
-ENV MAMBAFORGE_VERSION=4.9.2-5
+ENV MAMBAFORGE_VERSION=4.9.2-7
 RUN swupd bundle-add --no-progress curl && \
     curl -sL https://github.com/conda-forge/miniforge/releases/download/${MAMBAFORGE_VERSION}/Mambaforge-pypy3-Linux-x86_64.sh -o /tmp/mambaforge.sh && \
     sh /tmp/mambaforge.sh -bfp /usr && rm -f /tmp/mambaforge.sh

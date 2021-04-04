@@ -15,10 +15,10 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Use mamba to install remaining tools/dependencies into /usr/local
-ENV BWA_VERSION=0.7.17
+ENV ABRA_VERSION=2.23
 RUN mamba create -qy -p /usr/local \
         -c bioconda \
-        bwa==${BWA_VERSION}
+        abra2==${ABRA_VERSION}
 
 # Deploy the minimal OS and target tools into a blank image
 FROM scratch
@@ -27,7 +27,7 @@ COPY --from=builder /usr/local /usr/local
 
 ARG GIT_COMMIT
 LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.opencontainers.image.source="https://github.com/ucladx/dockerfiles/tree/"$GIT_COMMIT"/bwa/Dockerfile" \
+    org.opencontainers.image.source="https://github.com/ucladx/dockerfiles/tree/"$GIT_COMMIT"/abra/Dockerfile" \
     org.opencontainers.image.revision=$GIT_COMMIT
 
-# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t bwa:0.7.17 .
+# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t abra:2.23 .

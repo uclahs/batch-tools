@@ -7,7 +7,7 @@ RUN swupd bundle-add --no-progress curl && \
     sh /tmp/mambaforge.sh -bfp /usr && rm -f /tmp/mambaforge.sh
 
 # Install a minimal versioned OS into /install_root
-ENV CLEAR_VERSION=34250
+ENV CLEAR_VERSION=34440
 RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --version ${CLEAR_VERSION} \
     --path /install_root \

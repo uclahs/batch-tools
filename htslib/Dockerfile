@@ -15,9 +15,9 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Use mamba to install remaining tools/dependencies into /usr/local
-ENV HTSLIB_VERSION=1.11 \
-    BCFTOOLS_VERSION=1.11 \
-    SAMTOOLS_VERSION=1.11
+ENV HTSLIB_VERSION=1.12 \
+    BCFTOOLS_VERSION=1.12 \
+    SAMTOOLS_VERSION=1.12
 RUN mamba create -qy -p /usr/local \
         -c bioconda \
         htslib==${HTSLIB_VERSION} \
@@ -34,4 +34,4 @@ LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
     org.opencontainers.image.source="https://github.com/ucladx/dockerfiles/tree/"$GIT_COMMIT"/htslib/Dockerfile" \
     org.opencontainers.image.revision=$GIT_COMMIT
 
-# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t htslib:1.11 .
+# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t htslib:1.12 .

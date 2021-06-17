@@ -27,7 +27,7 @@ COPY --from=builder /usr/local /usr/local
 
 ARG GIT_COMMIT
 LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
-    org.opencontainers.image.source="https://github.com/uclahs/dockerfiles/tree/"$GIT_COMMIT"/gatk/Dockerfile" \
+    org.opencontainers.image.source="https://github.com/uclahs/batch-tools/tree/"$GIT_COMMIT"/gatk/Dockerfile" \
     org.opencontainers.image.revision=$GIT_COMMIT
 
 # BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t gatk:4.2.0.0 .

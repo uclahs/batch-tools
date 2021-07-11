@@ -1,13 +1,13 @@
 FROM clearlinux:latest AS builder
 
 # Download and install mamba into /usr/bin
-ENV MAMBAFORGE_VERSION=4.10.1-4
+ENV MAMBAFORGE_VERSION=4.10.3-1
 RUN swupd bundle-add --no-progress curl && \
     curl -sL https://github.com/conda-forge/miniforge/releases/download/${MAMBAFORGE_VERSION}/Mambaforge-pypy3-Linux-x86_64.sh -o /tmp/mambaforge.sh && \
     sh /tmp/mambaforge.sh -bfp /usr && rm -f /tmp/mambaforge.sh
 
 # Install a minimal versioned OS into /install_root
-ENV CLEAR_VERSION=34730
+ENV CLEAR_VERSION=34810
 RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --version ${CLEAR_VERSION} \
     --path /install_root \
@@ -15,7 +15,7 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Use mamba to install remaining tools/dependencies into /usr/local
-ENV MINIMAP2_VERSION=2.20
+ENV MINIMAP2_VERSION=2.21
 RUN mamba create -qy -p /usr/local \
         -c bioconda \
         minimap2==${MINIMAP2_VERSION}
@@ -30,4 +30,4 @@ LABEL org.opencontainers.image.authors="Cyriac Kandoth <ckandoth@gmail.com>" \
     org.opencontainers.image.source="https://github.com/uclahs/batch-tools/tree/"$GIT_COMMIT"/minimap/Dockerfile" \
     org.opencontainers.image.revision=$GIT_COMMIT
 
-# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t minimap:2.20 .
+# BUILD_CMD: docker build --pull --build-arg GIT_COMMIT=$(git rev-parse --short HEAD) -t minimap:2.21 .

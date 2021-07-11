@@ -15,10 +15,12 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Use mamba to install remaining tools/dependencies into /usr/local
-ENV MINIMAP2_VERSION=2.21
+ENV MINIMAP2_VERSION=2.21 \
+    SAMTOOLS_VERSION=1.13
 RUN mamba create -qy -p /usr/local \
         -c bioconda \
-        minimap2==${MINIMAP2_VERSION}
+        minimap2==${MINIMAP2_VERSION} \
+        samtools==${SAMTOOLS_VERSION}
 
 # Deploy the minimal OS and target tools into a blank image
 FROM scratch

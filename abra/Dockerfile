@@ -15,10 +15,12 @@ RUN swupd os-install --no-progress --no-boot-update --no-scripts \
     --bundles os-core
 
 # Use mamba to install remaining tools/dependencies into /usr/local
-ENV ABRA_VERSION=2.23
+ENV ABRA_VERSION=2.23 \
+    SAMTOOLS_VERSION=1.13
 RUN mamba create -qy -p /usr/local \
         -c bioconda \
-        abra2==${ABRA_VERSION}
+        abra2==${ABRA_VERSION} \
+        samtools==${SAMTOOLS_VERSION}
 
 # Deploy the minimal OS and target tools into a blank image
 FROM scratch
